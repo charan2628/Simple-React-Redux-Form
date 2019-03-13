@@ -1,0 +1,63 @@
+body {
+    font-family: "helvetica-neue", "Helvetica Neue", Helvetica, Arial, sans-serif
+}
+
+@media (max-width: 1000px) {
+    #container {
+        width: 70%;
+        margin: 0 auto;
+    }
+    
+    input {
+        width: 100%;
+        border: 1px solid black;
+        margin-top: 10px;
+        margin-bottom: 20px;
+    }
+
+    label {
+        margin-bottom: 10px;
+    }
+}
+
+@media (min-width: 1001px) {
+
+    #container {
+        width: 600px;
+        margin: 0 auto;
+    }
+
+    #title {
+        border-bottom: 1px solid #999;
+        margin-bottom: 25px;
+    }
+
+    #title span {
+        border-bottom: 4px solid #f96302;
+    }
+
+    #title h2 {
+        margin-bottom: 0px;
+    }
+    
+    input {
+        width: 70%;
+        height: 25px;
+        border: 1px solid black;
+        margin-top: 10px;
+        margin-bottom: 20px;
+    }
+
+    select {
+        width: 70%;
+        height: 30px;
+        border: 1px solid black;
+        margin-top: 10px;
+        margin-bottom: 20px;
+    }
+
+    #paymentForm table {
+        width: -webkit-fill-available;
+        width: -moz-fill-available;
+    }
+}
