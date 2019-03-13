@@ -45,6 +45,11 @@ export const expirationYear = (expirationYear) => ({
     expirationYear
 })
 
+export const cvv = (cvv) => ({
+    type: C.CVV,
+    cvv
+})
+
 export const password = (password) => ({
     type: C.PASSWORD,
     password

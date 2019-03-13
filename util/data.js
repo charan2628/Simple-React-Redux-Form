@@ -1,17 +1,17 @@
 export default {
     shippingDetails: {
         firstName: {
-            value: "",
+            value: "Light",
             valid: true,
             message: ""
         },
         lastName: {
-            value: "",
-            valid: true,
-            message: ""
+            value: "Y",
+            valid: false,
+            message: "Name should be atleast 3 characters"
         },
         email: {
-            value: "",
+            value: "midoriya@izuku.com",
             valid: true,
             message: ""
         },
@@ -21,39 +21,39 @@ export default {
             message: ""
         },
         shippingAddress: {
-            value: "",
-            valid: true,
-            message: ""
+            value: "y",
+            valid: false,
+            message: "Invalid Shipping Address"
         },
         zipCode: {
-            value: "",
+            value: "522002",
             valid: true,
             message: ""
         }
     },
     paymentDetails: {
         creditCard: {
-            value: "",
+            value: "4545 6565 7878 9898",
             valid: true,
             message: ""
         },
         expirationMonth: {
-            value: "",
+            value: "09 - September",
             valid: true,
             message: ""
         },
         expirationYear: {
-            value: "",
+            value: "2020",
             valid: true,
             message: ""
         },
         cvv: {
-            valid: "",
+            value: "123",
             valid: true,
             message: ""
         },
         password: {
-            valid: "",
+            value: "NO PASS",
             valid: true,
             message: ""
         }

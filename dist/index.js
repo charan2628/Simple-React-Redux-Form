@@ -100,12 +100,24 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
 /* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_dom__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _components_Container__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/Container */ "./components/Container.js");
+/* harmony import */ var _util_Store__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./util/Store */ "./util/Store.js");
+/* harmony import */ var _util_data__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./util/data */ "./util/data.js");
 
 
 
-var render = react_dom__WEBPACK_IMPORTED_MODULE_1___default.a.render;
+
+
 window.React = react__WEBPACK_IMPORTED_MODULE_0___default.a;
-render(react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_Container__WEBPACK_IMPORTED_MODULE_2__["default"], null), document.getElementById('react-container'));
+var store = Object(_util_Store__WEBPACK_IMPORTED_MODULE_3__["default"])(_util_data__WEBPACK_IMPORTED_MODULE_4__["default"]);
+
+var render = function render() {
+  react_dom__WEBPACK_IMPORTED_MODULE_1___default.a.render(react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_Container__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    store: store
+  }), document.getElementById('react-container'));
+};
+
+store.subscribe(render);
+render();
 
 /***/ }),
 
@@ -124,12 +136,17 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-/* harmony default export */ __webpack_exports__["default"] = (function (props) {
+/* harmony default export */ __webpack_exports__["default"] = (function (_ref) {
+  var store = _ref.store;
   return React.createElement("div", {
     id: "container"
   }, React.createElement(_Header__WEBPACK_IMPORTED_MODULE_0__["default"], null), React.createElement("form", {
     action: "/checkout"
-  }, React.createElement(_CustomerDetailsForm__WEBPACK_IMPORTED_MODULE_1__["default"], null), React.createElement(_PaymentDetailsForm__WEBPACK_IMPORTED_MODULE_2__["default"], null), React.createElement("button", null, "PLACE ORDER")));
+  }, React.createElement(_CustomerDetailsForm__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    store: store
+  }), React.createElement(_PaymentDetailsForm__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    store: store
+  }), React.createElement("button", null, "PLACE ORDER")));
 });
 
 /***/ }),
@@ -146,7 +163,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return CustomerDetailsForm; });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _util_constants__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../util/constants */ "./util/constants.js");
+/* harmony import */ var _util_validator__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../util/validator */ "./util/validator.js");
+/* harmony import */ var _util_actionCreators__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../util/actionCreators */ "./util/actionCreators.js");
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -165,6 +189,9 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 
 
+
+
+
 var Component = react__WEBPACK_IMPORTED_MODULE_0___default.a.Component;
 
 var CustomerDetailsForm =
@@ -173,45 +200,145 @@ function (_Component) {
   _inherits(CustomerDetailsForm, _Component);
 
   function CustomerDetailsForm(props) {
+    var _this;
+
     _classCallCheck(this, CustomerDetailsForm);
 
-    return _possibleConstructorReturn(this, _getPrototypeOf(CustomerDetailsForm).call(this, props));
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(CustomerDetailsForm).call(this, props));
+    _this.state = props.store.getState().shippingDetails;
+    return _this;
   }
 
   _createClass(CustomerDetailsForm, [{
+    key: "change",
+    value: function change(field) {
+      switch (field) {
+        case _util_constants__WEBPACK_IMPORTED_MODULE_1__["default"].FIRST_NAME:
+          var value = this.refs._firstName.value;
+          this.props.store.dispatch(Object(_util_actionCreators__WEBPACK_IMPORTED_MODULE_3__["firstName"])(_util_validator__WEBPACK_IMPORTED_MODULE_2__["default"].isValidName({
+            value: value
+          })));
+          break;
+
+        case _util_constants__WEBPACK_IMPORTED_MODULE_1__["default"].LAST_NAME:
+          value = this.refs._lastName.value;
+          this.props.store.dispatch(Object(_util_actionCreators__WEBPACK_IMPORTED_MODULE_3__["lastName"])(_util_validator__WEBPACK_IMPORTED_MODULE_2__["default"].isValidName({
+            value: value
+          })));
+          break;
+
+        case _util_constants__WEBPACK_IMPORTED_MODULE_1__["default"].EMAIL:
+          value = this.refs._email.value;
+          this.props.store.dispatch(Object(_util_actionCreators__WEBPACK_IMPORTED_MODULE_3__["email"])(_util_validator__WEBPACK_IMPORTED_MODULE_2__["default"].isValidEmail({
+            value: value
+          })));
+          break;
+
+        case _util_constants__WEBPACK_IMPORTED_MODULE_1__["default"].PHONE:
+          value = this.refs._phone.value;
+          this.props.store.dispatch(Object(_util_actionCreators__WEBPACK_IMPORTED_MODULE_3__["phone"])(_util_validator__WEBPACK_IMPORTED_MODULE_2__["default"].isValidPhoneNumber({
+            value: value
+          })));
+          break;
+
+        case _util_constants__WEBPACK_IMPORTED_MODULE_1__["default"].SHIPPING_ADDRESS:
+          value = this.refs._shippingAddress.value;
+          this.props.store.dispatch(Object(_util_actionCreators__WEBPACK_IMPORTED_MODULE_3__["shippingAddress"])(_util_validator__WEBPACK_IMPORTED_MODULE_2__["default"].isValidShippingAddress({
+            value: value
+          })));
+          break;
+
+        case _util_constants__WEBPACK_IMPORTED_MODULE_1__["default"].ZIP_CODE:
+          value = this.refs._email.value;
+          this.props.store.dispatch(Object(_util_actionCreators__WEBPACK_IMPORTED_MODULE_3__["zipCode"])(value));
+          break;
+
+        default:
+          break;
+      }
+    }
+  }, {
+    key: "componentWillReceiveProps",
+    value: function componentWillReceiveProps(nextProps) {
+      this.setState(_objectSpread({}, nextProps.store.getState().shippingDetails));
+    }
+  }, {
     key: "render",
     value: function render() {
+      var change = this.change.bind(this);
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         id: "userForm"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         id: "title"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", null, "Shipping"))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, "First Name"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
-        name: "firstname",
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", null, "Shipping"))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "inputContainer"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, "First Name"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+        name: "firstName",
         type: "text",
+        ref: "_firstName",
+        defaultValue: this.state.firstName.value,
+        onChange: function onChange() {
+          return change(_util_constants__WEBPACK_IMPORTED_MODULE_1__["default"].FIRST_NAME);
+        },
         required: true
-      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, "Last Name"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
-        name: "lastname",
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", null, this.state.firstName.message), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "inputContainer"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, "Last Name"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+        name: "lastName",
         type: "text",
+        ref: "_lastName",
+        defaultValue: this.state.lastName.value,
+        onChange: function onChange() {
+          return change(_util_constants__WEBPACK_IMPORTED_MODULE_1__["default"].LAST_NAME);
+        },
         required: true
-      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, "Email"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", null, this.state.lastName.message), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "inputContainer"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, "Email"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
         name: "email",
         type: "email",
+        ref: "_email",
+        defaultValue: this.state.email.value,
+        onChange: function onChange() {
+          return change(_util_constants__WEBPACK_IMPORTED_MODULE_1__["default"].EMAIL);
+        },
         required: true
-      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, "Phone"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", null, this.state.email.message), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "inputContainer"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, "Phone"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
         name: "phone",
         type: "phone",
+        ref: "_phone",
+        defaultValue: this.state.phone.value,
+        onChange: function onChange() {
+          return change(_util_constants__WEBPACK_IMPORTED_MODULE_1__["default"].PHONE);
+        },
         required: true
-      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, "Shipping Address"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
-        name: "shippingaddress",
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", null, this.state.phone.message), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "inputContainer"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, "Shipping Address"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+        name: "shippingAddress",
         type: "text",
+        ref: "_shippingAddress",
+        defaultValue: this.state.shippingAddress.value,
+        onChange: function onChange() {
+          return change(_util_constants__WEBPACK_IMPORTED_MODULE_1__["default"].SHIPPING_ADDRESS);
+        },
         required: true
-      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, "Zip Code"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
-        name: "zipcode",
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", null, this.state.shippingAddress.message), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "inputContainer"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, "Zip Code"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+        name: "zipCode",
         type: "text",
+        ref: "_zipCode",
+        defaultValue: this.state.zipCode.value,
+        onChange: function onChange() {
+          return change(_util_constants__WEBPACK_IMPORTED_MODULE_1__["default"].ZIP_CODE);
+        },
         required: true
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
         id: "city"
-      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null));
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", null, this.state.zipCode.message), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null)));
     }
   }]);
 
@@ -251,6 +378,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return PaymentDetailsForm; });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _util_constants__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../util/constants */ "./util/constants.js");
+/* harmony import */ var _util_validator__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../util/validator */ "./util/validator.js");
+/* harmony import */ var _util_actionCreators__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../util/actionCreators */ "./util/actionCreators.js");
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -270,6 +400,9 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 
 
+
+
+
 var Component = react__WEBPACK_IMPORTED_MODULE_0___default.a.Component;
 
 var PaymentDetailsForm =
@@ -278,24 +411,77 @@ function (_Component) {
   _inherits(PaymentDetailsForm, _Component);
 
   function PaymentDetailsForm(props) {
+    var _this;
+
     _classCallCheck(this, PaymentDetailsForm);
 
-    return _possibleConstructorReturn(this, _getPrototypeOf(PaymentDetailsForm).call(this, props));
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(PaymentDetailsForm).call(this, props));
+    _this.state = props.store.getState().paymentDetails;
+    return _this;
   }
 
   _createClass(PaymentDetailsForm, [{
+    key: "change",
+    value: function change(field) {
+      switch (field) {
+        case _util_constants__WEBPACK_IMPORTED_MODULE_1__["default"].CREDIT_CARD:
+          value = this.refs._creditCardNumber.value;
+          this.props.store.dispatch(Object(_util_actionCreators__WEBPACK_IMPORTED_MODULE_3__["creditCard"])(value));
+          break;
+
+        case _util_constants__WEBPACK_IMPORTED_MODULE_1__["default"].EXPIRATION_MONTH:
+          value = this.refs._expirationMonth.value;
+          this.props.store.dispatch(Object(_util_actionCreators__WEBPACK_IMPORTED_MODULE_3__["expirationMonth"])(value));
+          break;
+
+        case _util_constants__WEBPACK_IMPORTED_MODULE_1__["default"].EXPIRATION_YEAR:
+          value = this.refs._expirationYear.value;
+          this.props.store.dispatch(Object(_util_actionCreators__WEBPACK_IMPORTED_MODULE_3__["expirationYear"])(value));
+          break;
+
+        case _util_constants__WEBPACK_IMPORTED_MODULE_1__["default"].CVV:
+          value = this.refs._cvv.value;
+          this.props.store.dispatch(cvv(value));
+          break;
+
+        case _util_constants__WEBPACK_IMPORTED_MODULE_1__["default"].PASSWORD:
+          value = this.refs._password.value;
+          this.props.store.dispatch(Object(_util_actionCreators__WEBPACK_IMPORTED_MODULE_3__["password"])(value));
+          break;
+
+        default:
+          break;
+      }
+    }
+  }, {
     key: "render",
     value: function render() {
+      var change = this.change.bind(this);
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         id: "paymentForm"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         id: "title"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", null, "Payment"))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, "Credit Card"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
-        name: "creditcardnumber",
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", null, "Payment"))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "inputContainer"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, "Credit Card"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+        name: "creditCardNumber",
         type: "text",
+        ref: "_creditCardNumber",
+        defaultValue: this.state.creditCard.value,
+        onChange: function onChange() {
+          return change(_util_constants__WEBPACK_IMPORTED_MODULE_1__["default"].CREDIT_CARD);
+        },
         required: true
-      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("table", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, "Expiration"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("select", {
-        name: "expMonth"
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "inputContainer"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("table", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tbody", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, "Expiration"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("select", {
+        name: "expirationMonth",
+        ref: "_expirationMonth",
+        defaultValue: this.state.expirationMonth.value,
+        onChange: function onChange() {
+          return change(_util_constants__WEBPACK_IMPORTED_MODULE_1__["default"].EXPIRATION_MONTH);
+        },
+        required: true
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
         selected: "selected"
       }, "Month"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
@@ -323,15 +509,18 @@ function (_Component) {
       }, "11 - November"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
         value: "12 - December"
       }, "12 - December"))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, "\xA0"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("select", {
-        name: "expYear"
+        name: "expirationYear",
+        ref: "_expirationYear",
+        defaultValue: this.state.expirationYear.value,
+        onChange: function onChange() {
+          return change(_util_constants__WEBPACK_IMPORTED_MODULE_1__["default"].EXPIRATION_YEAR);
+        },
+        required: true
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
         value: "",
-        class: "",
         selected: "selected"
       }, "Year"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
-        disabled: "",
-        label: "2019",
-        value: "object:41"
+        value: "2019"
       }, "2019"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
         value: "2020"
       }, "2020"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
@@ -366,12 +555,21 @@ function (_Component) {
         value: "2035"
       }, "2035"))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, "CVV (on back)"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
         name: "cvv",
-        type: "text"
-      })))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, "Create Password"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+        type: "text",
+        ref: "_cvv",
+        defaultValue: this.state.cvv.value,
+        onChange: function onChange() {
+          return change(_util_constants__WEBPACK_IMPORTED_MODULE_1__["default"].CVV);
+        },
+        required: true
+      })))))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "inputContainer"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, "Create Password"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
         name: "password",
         type: "password",
+        ref: "_password",
         required: true
-      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null));
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null)));
     }
   }]);
 
@@ -23841,6 +24039,662 @@ if (false) {} else {
 
 /***/ }),
 
+/***/ "./node_modules/redux/es/redux.js":
+/*!****************************************!*\
+  !*** ./node_modules/redux/es/redux.js ***!
+  \****************************************/
+/*! exports provided: createStore, combineReducers, bindActionCreators, applyMiddleware, compose, __DO_NOT_USE__ActionTypes */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "createStore", function() { return createStore; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "combineReducers", function() { return combineReducers; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "bindActionCreators", function() { return bindActionCreators; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "applyMiddleware", function() { return applyMiddleware; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "compose", function() { return compose; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__DO_NOT_USE__ActionTypes", function() { return ActionTypes; });
+/* harmony import */ var symbol_observable__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! symbol-observable */ "./node_modules/symbol-observable/es/index.js");
+
+
+/**
+ * These are private action types reserved by Redux.
+ * For any unknown actions, you must return the current state.
+ * If the current state is undefined, you must return the initial state.
+ * Do not reference these action types directly in your code.
+ */
+var randomString = function randomString() {
+  return Math.random().toString(36).substring(7).split('').join('.');
+};
+
+var ActionTypes = {
+  INIT: "@@redux/INIT" + randomString(),
+  REPLACE: "@@redux/REPLACE" + randomString(),
+  PROBE_UNKNOWN_ACTION: function PROBE_UNKNOWN_ACTION() {
+    return "@@redux/PROBE_UNKNOWN_ACTION" + randomString();
+  }
+};
+
+/**
+ * @param {any} obj The object to inspect.
+ * @returns {boolean} True if the argument appears to be a plain object.
+ */
+function isPlainObject(obj) {
+  if (typeof obj !== 'object' || obj === null) return false;
+  var proto = obj;
+
+  while (Object.getPrototypeOf(proto) !== null) {
+    proto = Object.getPrototypeOf(proto);
+  }
+
+  return Object.getPrototypeOf(obj) === proto;
+}
+
+/**
+ * Creates a Redux store that holds the state tree.
+ * The only way to change the data in the store is to call `dispatch()` on it.
+ *
+ * There should only be a single store in your app. To specify how different
+ * parts of the state tree respond to actions, you may combine several reducers
+ * into a single reducer function by using `combineReducers`.
+ *
+ * @param {Function} reducer A function that returns the next state tree, given
+ * the current state tree and the action to handle.
+ *
+ * @param {any} [preloadedState] The initial state. You may optionally specify it
+ * to hydrate the state from the server in universal apps, or to restore a
+ * previously serialized user session.
+ * If you use `combineReducers` to produce the root reducer function, this must be
+ * an object with the same shape as `combineReducers` keys.
+ *
+ * @param {Function} [enhancer] The store enhancer. You may optionally specify it
+ * to enhance the store with third-party capabilities such as middleware,
+ * time travel, persistence, etc. The only store enhancer that ships with Redux
+ * is `applyMiddleware()`.
+ *
+ * @returns {Store} A Redux store that lets you read the state, dispatch actions
+ * and subscribe to changes.
+ */
+
+function createStore(reducer, preloadedState, enhancer) {
+  var _ref2;
+
+  if (typeof preloadedState === 'function' && typeof enhancer === 'function' || typeof enhancer === 'function' && typeof arguments[3] === 'function') {
+    throw new Error('It looks like you are passing several store enhancers to ' + 'createStore(). This is not supported. Instead, compose them ' + 'together to a single function');
+  }
+
+  if (typeof preloadedState === 'function' && typeof enhancer === 'undefined') {
+    enhancer = preloadedState;
+    preloadedState = undefined;
+  }
+
+  if (typeof enhancer !== 'undefined') {
+    if (typeof enhancer !== 'function') {
+      throw new Error('Expected the enhancer to be a function.');
+    }
+
+    return enhancer(createStore)(reducer, preloadedState);
+  }
+
+  if (typeof reducer !== 'function') {
+    throw new Error('Expected the reducer to be a function.');
+  }
+
+  var currentReducer = reducer;
+  var currentState = preloadedState;
+  var currentListeners = [];
+  var nextListeners = currentListeners;
+  var isDispatching = false;
+
+  function ensureCanMutateNextListeners() {
+    if (nextListeners === currentListeners) {
+      nextListeners = currentListeners.slice();
+    }
+  }
+  /**
+   * Reads the state tree managed by the store.
+   *
+   * @returns {any} The current state tree of your application.
+   */
+
+
+  function getState() {
+    if (isDispatching) {
+      throw new Error('You may not call store.getState() while the reducer is executing. ' + 'The reducer has already received the state as an argument. ' + 'Pass it down from the top reducer instead of reading it from the store.');
+    }
+
+    return currentState;
+  }
+  /**
+   * Adds a change listener. It will be called any time an action is dispatched,
+   * and some part of the state tree may potentially have changed. You may then
+   * call `getState()` to read the current state tree inside the callback.
+   *
+   * You may call `dispatch()` from a change listener, with the following
+   * caveats:
+   *
+   * 1. The subscriptions are snapshotted just before every `dispatch()` call.
+   * If you subscribe or unsubscribe while the listeners are being invoked, this
+   * will not have any effect on the `dispatch()` that is currently in progress.
+   * However, the next `dispatch()` call, whether nested or not, will use a more
+   * recent snapshot of the subscription list.
+   *
+   * 2. The listener should not expect to see all state changes, as the state
+   * might have been updated multiple times during a nested `dispatch()` before
+   * the listener is called. It is, however, guaranteed that all subscribers
+   * registered before the `dispatch()` started will be called with the latest
+   * state by the time it exits.
+   *
+   * @param {Function} listener A callback to be invoked on every dispatch.
+   * @returns {Function} A function to remove this change listener.
+   */
+
+
+  function subscribe(listener) {
+    if (typeof listener !== 'function') {
+      throw new Error('Expected the listener to be a function.');
+    }
+
+    if (isDispatching) {
+      throw new Error('You may not call store.subscribe() while the reducer is executing. ' + 'If you would like to be notified after the store has been updated, subscribe from a ' + 'component and invoke store.getState() in the callback to access the latest state. ' + 'See https://redux.js.org/api-reference/store#subscribe(listener) for more details.');
+    }
+
+    var isSubscribed = true;
+    ensureCanMutateNextListeners();
+    nextListeners.push(listener);
+    return function unsubscribe() {
+      if (!isSubscribed) {
+        return;
+      }
+
+      if (isDispatching) {
+        throw new Error('You may not unsubscribe from a store listener while the reducer is executing. ' + 'See https://redux.js.org/api-reference/store#subscribe(listener) for more details.');
+      }
+
+      isSubscribed = false;
+      ensureCanMutateNextListeners();
+      var index = nextListeners.indexOf(listener);
+      nextListeners.splice(index, 1);
+    };
+  }
+  /**
+   * Dispatches an action. It is the only way to trigger a state change.
+   *
+   * The `reducer` function, used to create the store, will be called with the
+   * current state tree and the given `action`. Its return value will
+   * be considered the **next** state of the tree, and the change listeners
+   * will be notified.
+   *
+   * The base implementation only supports plain object actions. If you want to
+   * dispatch a Promise, an Observable, a thunk, or something else, you need to
+   * wrap your store creating function into the corresponding middleware. For
+   * example, see the documentation for the `redux-thunk` package. Even the
+   * middleware will eventually dispatch plain object actions using this method.
+   *
+   * @param {Object} action A plain object representing “what changed”. It is
+   * a good idea to keep actions serializable so you can record and replay user
+   * sessions, or use the time travelling `redux-devtools`. An action must have
+   * a `type` property which may not be `undefined`. It is a good idea to use
+   * string constants for action types.
+   *
+   * @returns {Object} For convenience, the same action object you dispatched.
+   *
+   * Note that, if you use a custom middleware, it may wrap `dispatch()` to
+   * return something else (for example, a Promise you can await).
+   */
+
+
+  function dispatch(action) {
+    if (!isPlainObject(action)) {
+      throw new Error('Actions must be plain objects. ' + 'Use custom middleware for async actions.');
+    }
+
+    if (typeof action.type === 'undefined') {
+      throw new Error('Actions may not have an undefined "type" property. ' + 'Have you misspelled a constant?');
+    }
+
+    if (isDispatching) {
+      throw new Error('Reducers may not dispatch actions.');
+    }
+
+    try {
+      isDispatching = true;
+      currentState = currentReducer(currentState, action);
+    } finally {
+      isDispatching = false;
+    }
+
+    var listeners = currentListeners = nextListeners;
+
+    for (var i = 0; i < listeners.length; i++) {
+      var listener = listeners[i];
+      listener();
+    }
+
+    return action;
+  }
+  /**
+   * Replaces the reducer currently used by the store to calculate the state.
+   *
+   * You might need this if your app implements code splitting and you want to
+   * load some of the reducers dynamically. You might also need this if you
+   * implement a hot reloading mechanism for Redux.
+   *
+   * @param {Function} nextReducer The reducer for the store to use instead.
+   * @returns {void}
+   */
+
+
+  function replaceReducer(nextReducer) {
+    if (typeof nextReducer !== 'function') {
+      throw new Error('Expected the nextReducer to be a function.');
+    }
+
+    currentReducer = nextReducer;
+    dispatch({
+      type: ActionTypes.REPLACE
+    });
+  }
+  /**
+   * Interoperability point for observable/reactive libraries.
+   * @returns {observable} A minimal observable of state changes.
+   * For more information, see the observable proposal:
+   * https://github.com/tc39/proposal-observable
+   */
+
+
+  function observable() {
+    var _ref;
+
+    var outerSubscribe = subscribe;
+    return _ref = {
+      /**
+       * The minimal observable subscription method.
+       * @param {Object} observer Any object that can be used as an observer.
+       * The observer object should have a `next` method.
+       * @returns {subscription} An object with an `unsubscribe` method that can
+       * be used to unsubscribe the observable from the store, and prevent further
+       * emission of values from the observable.
+       */
+      subscribe: function subscribe(observer) {
+        if (typeof observer !== 'object' || observer === null) {
+          throw new TypeError('Expected the observer to be an object.');
+        }
+
+        function observeState() {
+          if (observer.next) {
+            observer.next(getState());
+          }
+        }
+
+        observeState();
+        var unsubscribe = outerSubscribe(observeState);
+        return {
+          unsubscribe: unsubscribe
+        };
+      }
+    }, _ref[symbol_observable__WEBPACK_IMPORTED_MODULE_0__["default"]] = function () {
+      return this;
+    }, _ref;
+  } // When a store is created, an "INIT" action is dispatched so that every
+  // reducer returns their initial state. This effectively populates
+  // the initial state tree.
+
+
+  dispatch({
+    type: ActionTypes.INIT
+  });
+  return _ref2 = {
+    dispatch: dispatch,
+    subscribe: subscribe,
+    getState: getState,
+    replaceReducer: replaceReducer
+  }, _ref2[symbol_observable__WEBPACK_IMPORTED_MODULE_0__["default"]] = observable, _ref2;
+}
+
+/**
+ * Prints a warning in the console if it exists.
+ *
+ * @param {String} message The warning message.
+ * @returns {void}
+ */
+function warning(message) {
+  /* eslint-disable no-console */
+  if (typeof console !== 'undefined' && typeof console.error === 'function') {
+    console.error(message);
+  }
+  /* eslint-enable no-console */
+
+
+  try {
+    // This error was thrown as a convenience so that if you enable
+    // "break on all exceptions" in your console,
+    // it would pause the execution at this line.
+    throw new Error(message);
+  } catch (e) {} // eslint-disable-line no-empty
+
+}
+
+function getUndefinedStateErrorMessage(key, action) {
+  var actionType = action && action.type;
+  var actionDescription = actionType && "action \"" + String(actionType) + "\"" || 'an action';
+  return "Given " + actionDescription + ", reducer \"" + key + "\" returned undefined. " + "To ignore an action, you must explicitly return the previous state. " + "If you want this reducer to hold no value, you can return null instead of undefined.";
+}
+
+function getUnexpectedStateShapeWarningMessage(inputState, reducers, action, unexpectedKeyCache) {
+  var reducerKeys = Object.keys(reducers);
+  var argumentName = action && action.type === ActionTypes.INIT ? 'preloadedState argument passed to createStore' : 'previous state received by the reducer';
+
+  if (reducerKeys.length === 0) {
+    return 'Store does not have a valid reducer. Make sure the argument passed ' + 'to combineReducers is an object whose values are reducers.';
+  }
+
+  if (!isPlainObject(inputState)) {
+    return "The " + argumentName + " has unexpected type of \"" + {}.toString.call(inputState).match(/\s([a-z|A-Z]+)/)[1] + "\". Expected argument to be an object with the following " + ("keys: \"" + reducerKeys.join('", "') + "\"");
+  }
+
+  var unexpectedKeys = Object.keys(inputState).filter(function (key) {
+    return !reducers.hasOwnProperty(key) && !unexpectedKeyCache[key];
+  });
+  unexpectedKeys.forEach(function (key) {
+    unexpectedKeyCache[key] = true;
+  });
+  if (action && action.type === ActionTypes.REPLACE) return;
+
+  if (unexpectedKeys.length > 0) {
+    return "Unexpected " + (unexpectedKeys.length > 1 ? 'keys' : 'key') + " " + ("\"" + unexpectedKeys.join('", "') + "\" found in " + argumentName + ". ") + "Expected to find one of the known reducer keys instead: " + ("\"" + reducerKeys.join('", "') + "\". Unexpected keys will be ignored.");
+  }
+}
+
+function assertReducerShape(reducers) {
+  Object.keys(reducers).forEach(function (key) {
+    var reducer = reducers[key];
+    var initialState = reducer(undefined, {
+      type: ActionTypes.INIT
+    });
+
+    if (typeof initialState === 'undefined') {
+      throw new Error("Reducer \"" + key + "\" returned undefined during initialization. " + "If the state passed to the reducer is undefined, you must " + "explicitly return the initial state. The initial state may " + "not be undefined. If you don't want to set a value for this reducer, " + "you can use null instead of undefined.");
+    }
+
+    if (typeof reducer(undefined, {
+      type: ActionTypes.PROBE_UNKNOWN_ACTION()
+    }) === 'undefined') {
+      throw new Error("Reducer \"" + key + "\" returned undefined when probed with a random type. " + ("Don't try to handle " + ActionTypes.INIT + " or other actions in \"redux/*\" ") + "namespace. They are considered private. Instead, you must return the " + "current state for any unknown actions, unless it is undefined, " + "in which case you must return the initial state, regardless of the " + "action type. The initial state may not be undefined, but can be null.");
+    }
+  });
+}
+/**
+ * Turns an object whose values are different reducer functions, into a single
+ * reducer function. It will call every child reducer, and gather their results
+ * into a single state object, whose keys correspond to the keys of the passed
+ * reducer functions.
+ *
+ * @param {Object} reducers An object whose values correspond to different
+ * reducer functions that need to be combined into one. One handy way to obtain
+ * it is to use ES6 `import * as reducers` syntax. The reducers may never return
+ * undefined for any action. Instead, they should return their initial state
+ * if the state passed to them was undefined, and the current state for any
+ * unrecognized action.
+ *
+ * @returns {Function} A reducer function that invokes every reducer inside the
+ * passed object, and builds a state object with the same shape.
+ */
+
+
+function combineReducers(reducers) {
+  var reducerKeys = Object.keys(reducers);
+  var finalReducers = {};
+
+  for (var i = 0; i < reducerKeys.length; i++) {
+    var key = reducerKeys[i];
+
+    if (true) {
+      if (typeof reducers[key] === 'undefined') {
+        warning("No reducer provided for key \"" + key + "\"");
+      }
+    }
+
+    if (typeof reducers[key] === 'function') {
+      finalReducers[key] = reducers[key];
+    }
+  }
+
+  var finalReducerKeys = Object.keys(finalReducers);
+  var unexpectedKeyCache;
+
+  if (true) {
+    unexpectedKeyCache = {};
+  }
+
+  var shapeAssertionError;
+
+  try {
+    assertReducerShape(finalReducers);
+  } catch (e) {
+    shapeAssertionError = e;
+  }
+
+  return function combination(state, action) {
+    if (state === void 0) {
+      state = {};
+    }
+
+    if (shapeAssertionError) {
+      throw shapeAssertionError;
+    }
+
+    if (true) {
+      var warningMessage = getUnexpectedStateShapeWarningMessage(state, finalReducers, action, unexpectedKeyCache);
+
+      if (warningMessage) {
+        warning(warningMessage);
+      }
+    }
+
+    var hasChanged = false;
+    var nextState = {};
+
+    for (var _i = 0; _i < finalReducerKeys.length; _i++) {
+      var _key = finalReducerKeys[_i];
+      var reducer = finalReducers[_key];
+      var previousStateForKey = state[_key];
+      var nextStateForKey = reducer(previousStateForKey, action);
+
+      if (typeof nextStateForKey === 'undefined') {
+        var errorMessage = getUndefinedStateErrorMessage(_key, action);
+        throw new Error(errorMessage);
+      }
+
+      nextState[_key] = nextStateForKey;
+      hasChanged = hasChanged || nextStateForKey !== previousStateForKey;
+    }
+
+    return hasChanged ? nextState : state;
+  };
+}
+
+function bindActionCreator(actionCreator, dispatch) {
+  return function () {
+    return dispatch(actionCreator.apply(this, arguments));
+  };
+}
+/**
+ * Turns an object whose values are action creators, into an object with the
+ * same keys, but with every function wrapped into a `dispatch` call so they
+ * may be invoked directly. This is just a convenience method, as you can call
+ * `store.dispatch(MyActionCreators.doSomething())` yourself just fine.
+ *
+ * For convenience, you can also pass a single function as the first argument,
+ * and get a function in return.
+ *
+ * @param {Function|Object} actionCreators An object whose values are action
+ * creator functions. One handy way to obtain it is to use ES6 `import * as`
+ * syntax. You may also pass a single function.
+ *
+ * @param {Function} dispatch The `dispatch` function available on your Redux
+ * store.
+ *
+ * @returns {Function|Object} The object mimicking the original object, but with
+ * every action creator wrapped into the `dispatch` call. If you passed a
+ * function as `actionCreators`, the return value will also be a single
+ * function.
+ */
+
+
+function bindActionCreators(actionCreators, dispatch) {
+  if (typeof actionCreators === 'function') {
+    return bindActionCreator(actionCreators, dispatch);
+  }
+
+  if (typeof actionCreators !== 'object' || actionCreators === null) {
+    throw new Error("bindActionCreators expected an object or a function, instead received " + (actionCreators === null ? 'null' : typeof actionCreators) + ". " + "Did you write \"import ActionCreators from\" instead of \"import * as ActionCreators from\"?");
+  }
+
+  var keys = Object.keys(actionCreators);
+  var boundActionCreators = {};
+
+  for (var i = 0; i < keys.length; i++) {
+    var key = keys[i];
+    var actionCreator = actionCreators[key];
+
+    if (typeof actionCreator === 'function') {
+      boundActionCreators[key] = bindActionCreator(actionCreator, dispatch);
+    }
+  }
+
+  return boundActionCreators;
+}
+
+function _defineProperty(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+  } else {
+    obj[key] = value;
+  }
+
+  return obj;
+}
+
+function _objectSpread(target) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = arguments[i] != null ? arguments[i] : {};
+    var ownKeys = Object.keys(source);
+
+    if (typeof Object.getOwnPropertySymbols === 'function') {
+      ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) {
+        return Object.getOwnPropertyDescriptor(source, sym).enumerable;
+      }));
+    }
+
+    ownKeys.forEach(function (key) {
+      _defineProperty(target, key, source[key]);
+    });
+  }
+
+  return target;
+}
+
+/**
+ * Composes single-argument functions from right to left. The rightmost
+ * function can take multiple arguments as it provides the signature for
+ * the resulting composite function.
+ *
+ * @param {...Function} funcs The functions to compose.
+ * @returns {Function} A function obtained by composing the argument functions
+ * from right to left. For example, compose(f, g, h) is identical to doing
+ * (...args) => f(g(h(...args))).
+ */
+function compose() {
+  for (var _len = arguments.length, funcs = new Array(_len), _key = 0; _key < _len; _key++) {
+    funcs[_key] = arguments[_key];
+  }
+
+  if (funcs.length === 0) {
+    return function (arg) {
+      return arg;
+    };
+  }
+
+  if (funcs.length === 1) {
+    return funcs[0];
+  }
+
+  return funcs.reduce(function (a, b) {
+    return function () {
+      return a(b.apply(void 0, arguments));
+    };
+  });
+}
+
+/**
+ * Creates a store enhancer that applies middleware to the dispatch method
+ * of the Redux store. This is handy for a variety of tasks, such as expressing
+ * asynchronous actions in a concise manner, or logging every action payload.
+ *
+ * See `redux-thunk` package as an example of the Redux middleware.
+ *
+ * Because middleware is potentially asynchronous, this should be the first
+ * store enhancer in the composition chain.
+ *
+ * Note that each middleware will be given the `dispatch` and `getState` functions
+ * as named arguments.
+ *
+ * @param {...Function} middlewares The middleware chain to be applied.
+ * @returns {Function} A store enhancer applying the middleware.
+ */
+
+function applyMiddleware() {
+  for (var _len = arguments.length, middlewares = new Array(_len), _key = 0; _key < _len; _key++) {
+    middlewares[_key] = arguments[_key];
+  }
+
+  return function (createStore) {
+    return function () {
+      var store = createStore.apply(void 0, arguments);
+
+      var _dispatch = function dispatch() {
+        throw new Error("Dispatching while constructing your middleware is not allowed. " + "Other middleware would not be applied to this dispatch.");
+      };
+
+      var middlewareAPI = {
+        getState: store.getState,
+        dispatch: function dispatch() {
+          return _dispatch.apply(void 0, arguments);
+        }
+      };
+      var chain = middlewares.map(function (middleware) {
+        return middleware(middlewareAPI);
+      });
+      _dispatch = compose.apply(void 0, chain)(store.dispatch);
+      return _objectSpread({}, store, {
+        dispatch: _dispatch
+      });
+    };
+  };
+}
+
+/*
+ * This is a dummy function to check if the function name has been altered by minification.
+ * If the function has been minified and NODE_ENV !== 'production', warn the user.
+ */
+
+function isCrushed() {}
+
+if ( true && typeof isCrushed.name === 'string' && isCrushed.name !== 'isCrushed') {
+  warning('You are currently using minified code outside of NODE_ENV === "production". ' + 'This means that you are running a slower development build of Redux. ' + 'You can use loose-envify (https://github.com/zertosh/loose-envify) for browserify ' + 'or setting mode to production in webpack (https://webpack.js.org/concepts/mode/) ' + 'to ensure you have the correct code for your production build.');
+}
+
+
+
+
+/***/ }),
+
 /***/ "./node_modules/scheduler/cjs/scheduler-tracing.development.js":
 /*!*********************************************************************!*\
   !*** ./node_modules/scheduler/cjs/scheduler-tracing.development.js ***!
@@ -25022,6 +25876,69 @@ if (false) {} else {
 
 /***/ }),
 
+/***/ "./node_modules/symbol-observable/es/index.js":
+/*!****************************************************!*\
+  !*** ./node_modules/symbol-observable/es/index.js ***!
+  \****************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* WEBPACK VAR INJECTION */(function(global, module) {/* harmony import */ var _ponyfill_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ponyfill.js */ "./node_modules/symbol-observable/es/ponyfill.js");
+/* global window */
+
+
+var root;
+
+if (typeof self !== 'undefined') {
+  root = self;
+} else if (typeof window !== 'undefined') {
+  root = window;
+} else if (typeof global !== 'undefined') {
+  root = global;
+} else if (true) {
+  root = module;
+} else {}
+
+var result = Object(_ponyfill_js__WEBPACK_IMPORTED_MODULE_0__["default"])(root);
+/* harmony default export */ __webpack_exports__["default"] = (result);
+
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../webpack/buildin/global.js */ "./node_modules/webpack/buildin/global.js"), __webpack_require__(/*! ./../../webpack/buildin/harmony-module.js */ "./node_modules/webpack/buildin/harmony-module.js")(module)))
+
+/***/ }),
+
+/***/ "./node_modules/symbol-observable/es/ponyfill.js":
+/*!*******************************************************!*\
+  !*** ./node_modules/symbol-observable/es/ponyfill.js ***!
+  \*******************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return symbolObservablePonyfill; });
+function symbolObservablePonyfill(root) {
+	var result;
+	var Symbol = root.Symbol;
+
+	if (typeof Symbol === 'function') {
+		if (Symbol.observable) {
+			result = Symbol.observable;
+		} else {
+			result = Symbol('observable');
+			Symbol.observable = result;
+		}
+	} else {
+		result = '@@observable';
+	}
+
+	return result;
+};
+
+
+/***/ }),
+
 /***/ "./node_modules/webpack/buildin/global.js":
 /*!***********************************!*\
   !*** (webpack)/buildin/global.js ***!
@@ -25050,6 +25967,453 @@ try {
 
 module.exports = g;
 
+
+/***/ }),
+
+/***/ "./node_modules/webpack/buildin/harmony-module.js":
+/*!*******************************************!*\
+  !*** (webpack)/buildin/harmony-module.js ***!
+  \*******************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = function(originalModule) {
+	if (!originalModule.webpackPolyfill) {
+		var module = Object.create(originalModule);
+		// module.parent = undefined by default
+		if (!module.children) module.children = [];
+		Object.defineProperty(module, "loaded", {
+			enumerable: true,
+			get: function() {
+				return module.l;
+			}
+		});
+		Object.defineProperty(module, "id", {
+			enumerable: true,
+			get: function() {
+				return module.i;
+			}
+		});
+		Object.defineProperty(module, "exports", {
+			enumerable: true
+		});
+		module.webpackPolyfill = 1;
+	}
+	return module;
+};
+
+
+/***/ }),
+
+/***/ "./util/Store.js":
+/*!***********************!*\
+  !*** ./util/Store.js ***!
+  \***********************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var redux__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! redux */ "./node_modules/redux/es/redux.js");
+/* harmony import */ var _reducers__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./reducers */ "./util/reducers.js");
+
+
+/* harmony default export */ __webpack_exports__["default"] = (function (initialState) {
+  return Object(redux__WEBPACK_IMPORTED_MODULE_0__["createStore"])(Object(redux__WEBPACK_IMPORTED_MODULE_0__["combineReducers"])({
+    shippingDetails: _reducers__WEBPACK_IMPORTED_MODULE_1__["shippingDetails"],
+    paymentDetails: _reducers__WEBPACK_IMPORTED_MODULE_1__["paymentDetails"]
+  }), initialState);
+});
+
+/***/ }),
+
+/***/ "./util/actionCreators.js":
+/*!********************************!*\
+  !*** ./util/actionCreators.js ***!
+  \********************************/
+/*! exports provided: firstName, lastName, email, phone, shippingAddress, zipCode, creditCard, expirationMonth, expirationYear, cvv, password, default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "firstName", function() { return firstName; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "lastName", function() { return lastName; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "email", function() { return email; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "phone", function() { return phone; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "shippingAddress", function() { return shippingAddress; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "zipCode", function() { return zipCode; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "creditCard", function() { return creditCard; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "expirationMonth", function() { return expirationMonth; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "expirationYear", function() { return expirationYear; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "cvv", function() { return cvv; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "password", function() { return password; });
+/* harmony import */ var _constants__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./constants */ "./util/constants.js");
+
+var firstName = function firstName(_firstName) {
+  return {
+    type: _constants__WEBPACK_IMPORTED_MODULE_0__["default"].FIRST_NAME,
+    firstName: _firstName
+  };
+};
+var lastName = function lastName(_lastName) {
+  return {
+    type: _constants__WEBPACK_IMPORTED_MODULE_0__["default"].LAST_NAME,
+    lastName: _lastName
+  };
+};
+var email = function email(_email) {
+  return {
+    type: _constants__WEBPACK_IMPORTED_MODULE_0__["default"].EMAIL,
+    email: _email
+  };
+};
+var phone = function phone(_phone) {
+  return {
+    type: _constants__WEBPACK_IMPORTED_MODULE_0__["default"].PHONE,
+    phone: _phone
+  };
+};
+var shippingAddress = function shippingAddress(_shippingAddress) {
+  return {
+    type: _constants__WEBPACK_IMPORTED_MODULE_0__["default"].SHIPPING_ADDRESS,
+    shippingAddress: _shippingAddress
+  };
+};
+var zipCode = function zipCode(_zipCode) {
+  return {
+    type: _constants__WEBPACK_IMPORTED_MODULE_0__["default"].ZIP_CODE,
+    zipCode: _zipCode
+  };
+};
+var creditCard = function creditCard(_creditCard) {
+  return {
+    type: _constants__WEBPACK_IMPORTED_MODULE_0__["default"].CREDIT_CARD,
+    creditCard: _creditCard
+  };
+};
+var expirationMonth = function expirationMonth(_expirationMonth) {
+  return {
+    type: _constants__WEBPACK_IMPORTED_MODULE_0__["default"].EXPIRATION_MONTH,
+    expirationMonth: _expirationMonth
+  };
+};
+var expirationYear = function expirationYear(_expirationYear) {
+  return {
+    type: _constants__WEBPACK_IMPORTED_MODULE_0__["default"].EXPIRATION_YEAR,
+    expirationYear: _expirationYear
+  };
+};
+var cvv = function cvv(_cvv) {
+  return {
+    type: _constants__WEBPACK_IMPORTED_MODULE_0__["default"].CVV,
+    cvv: _cvv
+  };
+};
+var password = function password(_password) {
+  return {
+    type: _constants__WEBPACK_IMPORTED_MODULE_0__["default"].PASSWORD,
+    password: _password
+  };
+};
+/* harmony default export */ __webpack_exports__["default"] = ({
+  firstName: firstName,
+  lastName: lastName,
+  email: email,
+  phone: phone,
+  shippingAddress: shippingAddress,
+  zipCode: zipCode,
+  creditCard: creditCard,
+  expirationMonth: expirationMonth,
+  expirationYear: expirationYear,
+  password: password
+});
+
+/***/ }),
+
+/***/ "./util/constants.js":
+/*!***************************!*\
+  !*** ./util/constants.js ***!
+  \***************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = ({
+  FIRST_NAME: "FIRST_NAME",
+  LAST_NAME: "LAST_NAME",
+  EMAIL: "EMAIL",
+  PHONE: "PHONE",
+  SHIPPING_ADDRESS: "SHIPPING_ADDRESS",
+  ZIP_CODE: "ZIP_CODE",
+  CREDIT_CARD: "CREDIT_CARD",
+  EXPIRATION_MONTH: "EXPIRATION_MONTH",
+  EXPIRATION_YEAR: "EXPIRATION_YEAR",
+  PASSWORD: "PASSWORD",
+  CVV: "CVV"
+});
+
+/***/ }),
+
+/***/ "./util/data.js":
+/*!**********************!*\
+  !*** ./util/data.js ***!
+  \**********************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = ({
+  shippingDetails: {
+    firstName: {
+      value: "Light",
+      valid: true,
+      message: ""
+    },
+    lastName: {
+      value: "Y",
+      valid: false,
+      message: "Name should be atleast 3 characters"
+    },
+    email: {
+      value: "midoriya@izuku.com",
+      valid: true,
+      message: ""
+    },
+    phone: {
+      value: "",
+      valid: true,
+      message: ""
+    },
+    shippingAddress: {
+      value: "y",
+      valid: false,
+      message: "Invalid Shipping Address"
+    },
+    zipCode: {
+      value: "522002",
+      valid: true,
+      message: ""
+    }
+  },
+  paymentDetails: {
+    creditCard: {
+      value: "4545 6565 7878 9898",
+      valid: true,
+      message: ""
+    },
+    expirationMonth: {
+      value: "09 - September",
+      valid: true,
+      message: ""
+    },
+    expirationYear: {
+      value: "2020",
+      valid: true,
+      message: ""
+    },
+    cvv: {
+      value: "123",
+      valid: true,
+      message: ""
+    },
+    password: {
+      value: "NO PASS",
+      valid: true,
+      message: ""
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./util/reducers.js":
+/*!**************************!*\
+  !*** ./util/reducers.js ***!
+  \**************************/
+/*! exports provided: shippingDetails, paymentDetails */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "shippingDetails", function() { return shippingDetails; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "paymentDetails", function() { return paymentDetails; });
+/* harmony import */ var _constants__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./constants */ "./util/constants.js");
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+
+var shippingDetails = function shippingDetails() {
+  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  var action = arguments.length > 1 ? arguments[1] : undefined;
+
+  switch (action.type) {
+    case _constants__WEBPACK_IMPORTED_MODULE_0__["default"].FIRST_NAME:
+      return _objectSpread({}, state, {
+        firstName: action.firstName
+      });
+
+    case _constants__WEBPACK_IMPORTED_MODULE_0__["default"].LAST_NAME:
+      return _objectSpread({}, state, {
+        lastName: action.lastName
+      });
+
+    case _constants__WEBPACK_IMPORTED_MODULE_0__["default"].EMAIL:
+      return _objectSpread({}, state, {
+        email: action.email
+      });
+
+    case _constants__WEBPACK_IMPORTED_MODULE_0__["default"].PHONE:
+      return _objectSpread({}, state, {
+        phone: action.phone
+      });
+
+    case _constants__WEBPACK_IMPORTED_MODULE_0__["default"].SHIPPING_ADDRESS:
+      return _objectSpread({}, state, {
+        shippingAddress: action.shippingAddress
+      });
+
+    case _constants__WEBPACK_IMPORTED_MODULE_0__["default"].ZIP_CODE:
+      return _objectSpread({}, state, {
+        zipCode: action.zipCode
+      });
+
+    default:
+      return state;
+  }
+};
+var paymentDetails = function paymentDetails() {
+  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  var action = arguments.length > 1 ? arguments[1] : undefined;
+
+  switch (action.type) {
+    case _constants__WEBPACK_IMPORTED_MODULE_0__["default"].CREDIT_CARD:
+      return _objectSpread({}, state, {
+        creditCard: action.creditCard
+      });
+
+    case _constants__WEBPACK_IMPORTED_MODULE_0__["default"].EXPIRATION_MONTH:
+      return _objectSpread({}, state, {
+        expirationMonth: action.expirationMonth
+      });
+
+    case _constants__WEBPACK_IMPORTED_MODULE_0__["default"].EXPIRATION_YEAR:
+      return _objectSpread({}, state, {
+        expirationYear: action.expirationYear
+      });
+
+    case _constants__WEBPACK_IMPORTED_MODULE_0__["default"].CVV:
+      return _objectSpread({}, state, {
+        cvv: action.cvv
+      });
+
+    case _constants__WEBPACK_IMPORTED_MODULE_0__["default"].PASSWORD:
+      return _objectSpread({}, state, {
+        password: action.password
+      });
+
+    default:
+      return state;
+  }
+};
+
+/***/ }),
+
+/***/ "./util/validator.js":
+/*!***************************!*\
+  !*** ./util/validator.js ***!
+  \***************************/
+/*! exports provided: isValidName, isValidEmail, isValidPhoneNumber, isValidShippingAddress, isValidPassword, isvalid, default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isValidName", function() { return isValidName; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isValidEmail", function() { return isValidEmail; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isValidPhoneNumber", function() { return isValidPhoneNumber; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isValidShippingAddress", function() { return isValidShippingAddress; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isValidPassword", function() { return isValidPassword; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isvalid", function() { return isvalid; });
+var isValidName = function isValidName(_ref) {
+  var name = _ref.value;
+  if (name.length < 3) return {
+    value: name,
+    valid: false,
+    message: "Name should be atleast 3 characters"
+  };
+  return {
+    value: name,
+    valid: true,
+    message: ""
+  };
+};
+var isValidEmail = function isValidEmail(_ref2) {
+  var email = _ref2.value;
+  if (/[^@]*@[^.]*\.[a-zA-Z]*/.test(email)) return {
+    value: email,
+    valid: true,
+    message: ""
+  };
+  return {
+    value: email,
+    valid: false,
+    message: "Invalid Email"
+  };
+};
+var isValidPhoneNumber = function isValidPhoneNumber(_ref3) {
+  var phoneNumber = _ref3.value;
+  if (/[0-9]{10}/.test(phoneNumber)) return {
+    value: phoneNumber,
+    valid: true,
+    message: ""
+  };
+  return {
+    value: phoneNumber,
+    valid: false,
+    message: "Invalid Phone Number"
+  };
+};
+var isValidShippingAddress = function isValidShippingAddress(_ref4) {
+  var shippingAddress = _ref4.value;
+  if (shippingAddress.length < 3) return {
+    value: shippingAddress,
+    valid: false,
+    message: "Invalid Shipping Address"
+  };
+  return {
+    value: shippingAddress,
+    valid: true,
+    message: ""
+  };
+};
+var isValidPassword = function isValidPassword(_ref5) {
+  var password = _ref5.value;
+  console.log(password.length < 8);
+  if (password.length < 8) return {
+    value: password,
+    valid: false,
+    message: "password should be atleast 8 characters"
+  };
+  return {
+    value: password,
+    valid: true,
+    message: ""
+  };
+};
+var isvalid = function isvalid(data) {
+  if (data.shippingDetails.firstName.valid && data.shippingDetails.lastName.valid && data.shippingDetails.email.valid && data.shippingDetails.phone.valid && data.shippingDetails.shippingAddress.valid && data.shippingDetails.zipCode.valid && data.paymentDetails.creditCard.valid && data.paymentDetails.cvv.valid && data.paymentDetails.expirationMonth.valid && data.paymentDetails.expirationYear.valid && data.paymentDetails.password.valid) return true;
+  return false;
+};
+/* harmony default export */ __webpack_exports__["default"] = ({
+  isValidName: isValidName,
+  isValidEmail: isValidEmail,
+  isValidPhoneNumber: isValidPhoneNumber,
+  isValidShippingAddress: isValidShippingAddress,
+  isValidPassword: isValidPassword,
+  isvalid: isvalid
+});
 
 /***/ })
 

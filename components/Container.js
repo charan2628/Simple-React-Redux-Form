@@ -2,12 +2,12 @@ import Header from './Header';
 import CustomerDetailsForm from './CustomerDetailsForm';
 import PaymentDetailsForm from './PaymentDetailsForm';
 
-export default (props) =>
+export default ({store}) =>
     <div id="container">
         <Header />
         <form action="/checkout">
-            <CustomerDetailsForm />
-            <PaymentDetailsForm />
+            <CustomerDetailsForm store={store}/>
+            <PaymentDetailsForm store={store}/>
             <button>PLACE ORDER</button>
         </form>
     </div>

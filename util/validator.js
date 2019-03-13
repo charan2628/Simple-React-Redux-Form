@@ -1,8 +1,8 @@
-export const isValidName = (name) => {
+export const isValidName = ({value: name}) => {
     if(name.length < 3) return {
         value: name,
         valid: false,
-        message: "name should be atleast 3 characters"
+        message: "Name should be atleast 3 characters"
     };
     return {
         value: name,
@@ -11,7 +11,7 @@ export const isValidName = (name) => {
     }; 
 }
 
-export const isValidEmail = (email) => {
+export const isValidEmail = ({value: email}) => {
     if(/[^@]*@[^.]*\.[a-zA-Z]*/.test(email)) return {
         value: email,
         valid: true,
@@ -20,28 +20,28 @@ export const isValidEmail = (email) => {
     return {
         value: email,
         valid: false,
-        message: "invalid email"
+        message: "Invalid Email"
     };
 }
 
-export const isValidPhoneNumber = (phoneNumber) => {
-    if(phoneNumber.length === 10) return {
+export const isValidPhoneNumber = ({value: phoneNumber}) => {
+    if(/[0-9]{10}/.test(phoneNumber)) return {
         value: phoneNumber,
         valid: true,
         message: ""
     };
     return {
         value: phoneNumber,
-        valid: true,
-        message: "invalid phone number"
+        valid: false,
+        message: "Invalid Phone Number"
     }
 }
 
-export const isValidShippingAddress = (shippingAddress) => {
+export const isValidShippingAddress = ({value: shippingAddress}) => {
     if(shippingAddress.length < 3) return {
         value: shippingAddress,
         valid: false,
-        message: "invalid shipping address"
+        message: "Invalid Shipping Address"
     }
     return {
         value: shippingAddress,
@@ -50,7 +50,8 @@ export const isValidShippingAddress = (shippingAddress) => {
     }
 }
 
-export const isValidPassword = (password) => {
+export const isValidPassword = ({value: password}) => {
+    console.log(password.length < 8)
     if(password.length < 8) return {
         value: password,
         valid: false,

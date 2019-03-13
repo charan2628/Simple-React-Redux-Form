@@ -1,7 +1,7 @@
 import C from './constants';
 
 export const shippingDetails = (state = {}, action) => {
-    switch(action.type) {
+    switch (action.type) {
         case C.FIRST_NAME:
             return {
                 ...state,
@@ -38,8 +38,8 @@ export const shippingDetails = (state = {}, action) => {
 }
 
 export const paymentDetails = (state = {}, action) => {
-    switch(action.type) {
-        case C.CREDIT_CARD: 
+    switch (action.type) {
+        case C.CREDIT_CARD:
             return {
                 ...state,
                 creditCard: action.creditCard
@@ -49,15 +49,22 @@ export const paymentDetails = (state = {}, action) => {
                 ...state,
                 expirationMonth: action.expirationMonth
             }
-        case C.EXPIRATION_YEAR: 
+        case C.EXPIRATION_YEAR:
             return {
                 ...state,
                 expirationYear: action.expirationYear
+            }
+        case C.CVV:
+            return {
+                ...state,
+                cvv: action.cvv
             }
         case C.PASSWORD:
             return {
                 ...state,
                 password: action.password
             }
+        default:
+            return state
     }
 }
