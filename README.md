@@ -12,12 +12,12 @@ Project Structure:
 
 Redux components storeFactory, ActionCreators, Reducers, intialData are in '/util' Folder
 
-UI html/css/js are in '/dist' folder
+UI html/css/js are in <a href="https://github.com/charan2628/Simple-React-Redux-Form/tree/master/dist">'/dist'</a> folder
 
-React components in '/components' folder
-React startup file './app.js' in root
+React components in <a href="https://github.com/charan2628/Simple-React-Redux-Form/tree/master/components">'/components'</a> folder
+React startup file <a href="https://github.com/charan2628/Simple-React-Redux-Form/blob/master/app.js">'./app.js'</a> in root
 
-Server starup code in './server.js' file in root
+Server starup code in <a href="https://github.com/charan2628/Simple-React-Redux-Form/blob/master/server.js">'./server.js'</a> file in root
 
 This project uses:
 Express for server,
