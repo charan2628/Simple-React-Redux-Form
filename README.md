@@ -10,7 +10,7 @@ Due to Redux single state the pre-loading of from in UI is simple, by just givin
 
 Project Structure:
 
-Redux components storeFactory, ActionCreators, Reducers, intialData are in '/util' Folder
+Redux components storeFactory, ActionCreators, Reducers, intialData are in <a href="https://github.com/charan2628/Simple-React-Redux-Form/tree/master/util">'/util'</a> Folder
 
 UI html/css/js are in <a href="https://github.com/charan2628/Simple-React-Redux-Form/tree/master/dist">'/dist'</a> folder
 
