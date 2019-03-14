@@ -1,5 +1,4 @@
 # Simple-React-Redux-Form
-Form built with React with Redux state management
 
 Simple React Form
 
