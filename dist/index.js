@@ -130,24 +130,93 @@ render();
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _Header__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Header */ "./components/Header.js");
-/* harmony import */ var _CustomerDetailsForm__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./CustomerDetailsForm */ "./components/CustomerDetailsForm.js");
-/* harmony import */ var _PaymentDetailsForm__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./PaymentDetailsForm */ "./components/PaymentDetailsForm.js");
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Container; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _Header__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Header */ "./components/Header.js");
+/* harmony import */ var _CustomerDetailsForm__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./CustomerDetailsForm */ "./components/CustomerDetailsForm.js");
+/* harmony import */ var _PaymentDetailsForm__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./PaymentDetailsForm */ "./components/PaymentDetailsForm.js");
+/* harmony import */ var _util_validator__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../util/validator */ "./util/validator.js");
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 
 
 
-/* harmony default export */ __webpack_exports__["default"] = (function (_ref) {
-  var store = _ref.store;
-  return React.createElement("div", {
-    id: "container"
-  }, React.createElement(_Header__WEBPACK_IMPORTED_MODULE_0__["default"], null), React.createElement("form", {
-    action: "/checkout"
-  }, React.createElement(_CustomerDetailsForm__WEBPACK_IMPORTED_MODULE_1__["default"], {
-    store: store
-  }), React.createElement(_PaymentDetailsForm__WEBPACK_IMPORTED_MODULE_2__["default"], {
-    store: store
-  }), React.createElement("button", null, "PLACE ORDER")));
-});
+
+
+
+
+var Container =
+/*#__PURE__*/
+function (_React$Component) {
+  _inherits(Container, _React$Component);
+
+  function Container(props) {
+    var _this;
+
+    _classCallCheck(this, Container);
+
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(Container).call(this, props));
+    _this.submit = _this.submit.bind(_assertThisInitialized(_this));
+    return _this;
+  }
+
+  _createClass(Container, [{
+    key: "submit",
+    value: function submit(e) {
+      e.preventDefault();
+      console.log(e);
+
+      if (_util_validator__WEBPACK_IMPORTED_MODULE_4__["default"].isvalid(this.props.store.getState())) {
+        var checkoutForm = new FormData();
+        checkoutForm.append('data', JSON.stringify(this.props.store.getState()));
+        fetch('/checkout/data', {
+          method: "post",
+          body: checkoutForm
+        }).then(function (res) {
+          console.log(res);
+        });
+      } else {
+        console.log('not valid');
+      }
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      var store = this.props.store;
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        id: "container"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Header__WEBPACK_IMPORTED_MODULE_1__["default"], null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", {
+        action: "/checkout",
+        method: "post",
+        onSubmit: this.submit
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_CustomerDetailsForm__WEBPACK_IMPORTED_MODULE_2__["default"], {
+        store: store
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_PaymentDetailsForm__WEBPACK_IMPORTED_MODULE_3__["default"], {
+        store: store
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", null, "PLACE ORDER")));
+    }
+  }]);
+
+  return Container;
+}(react__WEBPACK_IMPORTED_MODULE_0___default.a.Component);
+
+
 
 /***/ }),
 
@@ -212,6 +281,8 @@ function (_Component) {
   _createClass(CustomerDetailsForm, [{
     key: "change",
     value: function change(field) {
+      var _this2 = this;
+
       switch (field) {
         case _util_constants__WEBPACK_IMPORTED_MODULE_1__["default"].FIRST_NAME:
           var value = this.refs._firstName.value;
@@ -249,9 +320,35 @@ function (_Component) {
           break;
 
         case _util_constants__WEBPACK_IMPORTED_MODULE_1__["default"].ZIP_CODE:
-          value = this.refs._email.value;
-          this.props.store.dispatch(Object(_util_actionCreators__WEBPACK_IMPORTED_MODULE_3__["zipCode"])(value));
+          value = this.refs._zipCode.value;
+          fetch('/zipCode/' + value).then(function (res) {
+            return res.json();
+          }).then(function (data) {
+            _this2.props.store.dispatch(Object(_util_actionCreators__WEBPACK_IMPORTED_MODULE_3__["zipCode"])({
+              value: {
+                code: value,
+                places: data.places,
+                selected: ""
+              },
+              valid: true,
+              message: ""
+            }));
+          });
           break;
+
+        case _util_constants__WEBPACK_IMPORTED_MODULE_1__["default"].PLACE:
+          value = this.refs._place.value;
+          var code = this.refs._zipCode.value;
+          var places = this.state.zipCode.value.places;
+          this.props.store.dispatch(Object(_util_actionCreators__WEBPACK_IMPORTED_MODULE_3__["zipCode"])({
+            value: {
+              code: code,
+              places: places,
+              selected: value
+            },
+            valid: true,
+            message: ""
+          }));
 
         default:
           break;
@@ -331,14 +428,24 @@ function (_Component) {
         name: "zipCode",
         type: "text",
         ref: "_zipCode",
-        defaultValue: this.state.zipCode.value,
+        defaultValue: this.state.zipCode.value.code,
         onChange: function onChange() {
           return change(_util_constants__WEBPACK_IMPORTED_MODULE_1__["default"].ZIP_CODE);
         },
         required: true
-      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-        id: "city"
-      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", null, this.state.zipCode.message), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null)));
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("select", {
+        name: "place",
+        hidden: this.state.zipCode.value.places.length === 0,
+        ref: "_place",
+        onChange: function onChange() {
+          return change(_util_constants__WEBPACK_IMPORTED_MODULE_1__["default"].PLACE);
+        },
+        defaultValue: this.state.zipCode.value.selected
+      }, this.state.zipCode.value.places.map(function (place, i) {
+        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
+          key: i
+        }, place);
+      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", null, this.state.zipCode.message), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null)));
     }
   }]);
 
@@ -26150,7 +26257,8 @@ __webpack_require__.r(__webpack_exports__);
   EXPIRATION_MONTH: "EXPIRATION_MONTH",
   EXPIRATION_YEAR: "EXPIRATION_YEAR",
   PASSWORD: "PASSWORD",
-  CVV: "CVV"
+  CVV: "CVV",
+  PLACE: "PLACE"
 });
 
 /***/ }),
@@ -26192,7 +26300,11 @@ __webpack_require__.r(__webpack_exports__);
       message: "Invalid Shipping Address"
     },
     zipCode: {
-      value: "522002",
+      value: {
+        code: "52202",
+        places: ["No Where", "DisneyLand"],
+        selected: ""
+      },
       valid: true,
       message: ""
     }

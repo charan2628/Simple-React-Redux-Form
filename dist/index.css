@@ -47,6 +47,22 @@ body {
         margin-top: 10px;
     }
 
+    input[name="zipCode"] {
+        width: 30%;
+        height: 25px;
+        border: 1px solid black;
+        margin-top: 10px;
+        margin-right: 20px;
+    }
+
+    select[name="place"] {
+        width: 30%;
+        height: 30px;
+        border: 1px solid black;
+        margin-top: 10px;
+        margin-bottom: 20px;
+    }
+
     select {
         width: 70%;
         height: 30px;

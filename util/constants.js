@@ -9,5 +9,6 @@ export default {
     EXPIRATION_MONTH: "EXPIRATION_MONTH",
     EXPIRATION_YEAR: "EXPIRATION_YEAR",
     PASSWORD: "PASSWORD",
-    CVV: "CVV"
+    CVV: "CVV",
+    PLACE: "PLACE"
 }

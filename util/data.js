@@ -26,7 +26,11 @@ export default {
             message: "Invalid Shipping Address"
         },
         zipCode: {
-            value: "522002",
+            value: {
+                code: "52202",
+                places: ["No Where", "DisneyLand"],
+                selected: ""
+            },
             valid: true,
             message: ""
         }

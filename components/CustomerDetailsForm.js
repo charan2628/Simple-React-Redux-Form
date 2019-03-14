@@ -35,9 +35,34 @@ export default class CustomerDetailsForm extends Component {
                 this.props.store.dispatch(shippingAddress(validator.isValidShippingAddress({ value })));
                 break;
             case C.ZIP_CODE:
-                value = this.refs._email.value;
-                this.props.store.dispatch(zipCode(value));
+                value = this.refs._zipCode.value;
+                fetch('/zipCode/'+value).
+                then(res => res.json()).
+                then(data => {
+                    this.props.store.dispatch(zipCode({
+                        value: {
+                            code: value,
+                            places: data.places,
+                            selected: ""
+                        },
+                        valid: true,
+                        message: ""
+                    }));
+                });
                 break;
+            case C.PLACE:
+                value = this.refs._place.value;
+                let code = this.refs._zipCode.value;
+                let places = this.state.zipCode.value.places;
+                this.props.store.dispatch(zipCode({
+                    value: {
+                        code,
+                        places,
+                        selected: value
+                    },
+                    valid: true,
+                    message: ""
+                }));
             default:
                 break;
         }
@@ -88,8 +113,17 @@ export default class CustomerDetailsForm extends Component {
                 </div>
                 <div className="inputContainer">
                     <label>Zip Code</label><br />
-                    <input name="zipCode" type="text" ref="_zipCode" defaultValue={this.state.zipCode.value}
-                        onChange={() => change(C.ZIP_CODE)} required /><span id="city"></span><br />
+                    <input name="zipCode" type="text" ref="_zipCode" defaultValue={this.state.zipCode.value.code}
+                        onChange={() => change(C.ZIP_CODE)} required />
+                    <select name="place" hidden={this.state.zipCode.value.places.length === 0} ref="_place"
+                        onChange={() => change(C.PLACE)} defaultValue={this.state.zipCode.value.selected}>
+                        {
+                            this.state.zipCode.value.places.map((place, i) => 
+                                    <option key={i}>{place}</option>
+                                    )
+                        }
+                    </select>
+                        <br />
                     <span>{this.state.zipCode.message}</span><br />
                 </div>
             </div>
